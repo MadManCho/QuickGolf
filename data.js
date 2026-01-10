@@ -2,7 +2,7 @@
 // This file contains all players, schedule, and scores data
 
 // Players Data
-let playersData = [
+if playersData = [
     { name: "Khanh", handicap: 11 },
     { name: "Paul", handicap: 21 },
     { name: "Joey", handicap: 1 },
@@ -22,7 +22,7 @@ let playersData = [
 ];
 
 // Schedule Data
-let scheduleData = [
+if scheduleData = [
     {
         week: "Week 1",
         dates: "Nov 9-15, 2025",
@@ -196,7 +196,7 @@ let scheduleData = [
 ];
 
 // Scores Data - mapped by week index
-let weekScores = {
+if weekScores = {
     0: { // Week 1 - Club72 LAKE
         "Andrew": -4,
         "Jackson": 6,

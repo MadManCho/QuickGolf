@@ -1628,9 +1628,8 @@
             }
         }
 
-        // Data from data.js file - if external file doesn't load, use this fallback
-        if (typeof playersData === 'undefined') {
-            playersData = [
+        // Initialize data directly (no external file needed)
+        playersData = [
                 { name: "Khanh", handicap: 11 },
                 { name: "Paul", handicap: 21 },
                 { name: "Joey", handicap: 1 },

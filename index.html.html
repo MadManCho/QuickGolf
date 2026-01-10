@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicksand Golf League - Season 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 50%, #0a5e2a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            padding: 40px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            border-bottom: 6px solid #f4c542;
+            border-top: 2px solid #f4c542;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.8em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .header .season {
+            color: #f4c542;
+            font-size: 1.3em;
+            font-style: italic;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .main-content {
+            background: #faf8f3;
+            padding: 30px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .current-week-banner {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .weeks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .week-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 6px solid #0a5e2a;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .week-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px rgba(10, 94, 42, 0.2);
+        }
+
+        .week-card.current {
+            border-left-width: 10px;
+            border-left-color: #f4c542;
+            background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+            box-shadow: 0 6px 15px rgba(244, 197, 66, 0.3);
+        }
+
+        .week-card.special {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fff 0%, #ffe6e6 100%);
+        }
+
+        .week-card.break {
+            border-left-color: #95a5a6;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .week-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .week-dates {
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+
+        .course-info {
+            margin-bottom: 20px;
+        }
+
+        .course-name {
+            font-size: 1.5em;
+            color: #0a5e2a;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .special .course-name {
+            color: #8b0000;
+        }
+
+        .course-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .detail-item {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #2c3e50;
+            border: 1px solid #e0e0e0;
+        }
+
+        .detail-item strong {
+            color: #0a5e2a;
+        }
+
+        .special-event {
+            background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .week-winner {
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 6px rgba(244, 197, 66, 0.3);
+        }
+
+        .winner-text {
+            color: #0a5e2a;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .winner-text strong {
+            font-size: 1.1em;
+            color: #0a5e2a;
+        }
+
+        .tournament-badge {
+            display: inline-block;
+            background: #f4c542;
+            color: #0a5e2a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .current-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            color: #0a5e2a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .golf-ball {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
+            margin-right: 8px;
+        }
+
+        .upcoming {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .upcoming h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .upcoming-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            color: #0a5e2a;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .scroll-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        .scroll-top.show {
+            display: block;
+        }
+
+        .admin-nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-btn,
+        .players-btn,
+        .players-list-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover,
+        .players-btn:hover,
+        .players-list-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #0d7436 0%, #0a5e2a 100%);
+        }
+
+        .admin-btn.active {
+            background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+        }
+
+        .players-btn.active {
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            color: #0a5e2a;
+        }
+
+        .players-list-btn.active {
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            color: #0a5e2a;
+        }
+
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .admin-panel.show {
+            display: block;
+        }
+
+        .password-prompt {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-prompt.show {
+            display: flex;
+        }
+
+        .players-list-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .players-list-panel.show {
+            display: block;
+        }
+
+        .players-list-content {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .players-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #0a5e2a;
+        }
+
+        .players-list-header h2 {
+            color: #2c3e50;
+            font-size: 2em;
+        }
+
+        .legend {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid #0a5e2a;
+        }
+
+        .legend h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .players-table thead {
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+        }
+
+        .players-table th {
+            padding: 18px 20px;
+            text-align: left;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .players-table tbody tr {
+            border-bottom: 1px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+
+        .players-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .players-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .players-table td {
+            padding: 16px 20px;
+            font-size: 1.05em;
+        }
+
+        .table-player-name {
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.15em;
+        }
+
+        .table-player-handicap {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .table-player-tee {
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 15px;
+            display: inline-block;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .table-player-tee.black {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .table-player-tee.blue {
+            background: #3498db;
+            color: white;
+        }
+
+        .table-player-tee.white {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 2px solid #95a5a6;
+        }
+
+        .stats-cards {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h4 {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .number {
+            color: #2c3e50;
+            font-size: 2.2em;
+            font-weight: bold;
+        }
+
+        .stat-card.black-tee .number {
+            color: #2c3e50;
+        }
+
+        .stat-card.blue-tee .number {
+            color: #3498db;
+        }
+
+        .stat-card.white-tee .number {
+            color: #d4a729;
+        }
+
+        .scores-management {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .scores-edit-list {
+            margin-top: 30px;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .score-item:hover {
+            background: #ecf0f1;
+        }
+
+        .score-item-player {
+            flex: 1;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.05em;
+        }
+
+        .score-item-input {
+            width: 100px;
+            padding: 8px 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 1em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-item-input:focus {
+            outline: none;
+            border-color: #0a5e2a;
+        }
+
+        .score-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .score-save-btn {
+            padding: 8px 16px;
+            background: #0a5e2a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .score-save-btn:hover {
+            background: #0d7436;
+        }
+
+        .score-remove-btn {
+            padding: 8px 16px;
+            background: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .score-remove-btn:hover {
+            background: #660000;
+        }
+
+        .add-all-scores-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f4c542 0%, #d4a729 100%);
+            color: #0a5e2a;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .add-all-scores-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+
+        .no-scores-message {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .scores-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .scores-popup.show {
+            display: block;
+        }
+
+        .scores-content {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .scores-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #0a5e2a;
+        }
+
+        .scores-header h2 {
+            color: #0a5e2a;
+            font-size: 1.8em;
+        }
+
+        .scores-week-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f4c542;
+        }
+
+        .scores-week-info h3 {
+            color: #0a5e2a;
+            margin-bottom: 8px;
+        }
+
+        .scores-week-info p {
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+
+        .scores-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .scores-table thead {
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+        }
+
+        .scores-table th {
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .scores-table th:last-child {
+            text-align: center;
+        }
+
+        .scores-table tbody tr {
+            border-bottom: 1px solid #ecf0f1;
+            transition: background 0.2s ease;
+        }
+
+        .scores-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .scores-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .scores-table td {
+            padding: 12px 15px;
+        }
+
+        .scores-table .player-name-col {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .scores-table .score-col {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score-under {
+            color: #8b0000;
+        }
+
+        .score-over {
+            color: #2c3e50;
+        }
+
+        .score-even {
+            color: #0a5e2a;
+        }
+
+        .score-best {
+            background: #fffef8;
+            border-left: 4px solid #f4c542;
+        }
+
+        .no-score {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .players-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .players-panel.show {
+            display: block;
+        }
+
+        .players-content {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .players-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .players-header h2 {
+            color: #2c3e50;
+            font-size: 2em;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ecf0f1 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .player-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .player-handicap {
+            font-size: 1.1em;
+            color: #7f8c8d;
+        }
+
+        .player-handicap strong {
+            color: #3498db;
+            font-size: 1.3em;
+        }
+
+        .player-tee {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        .player-tee strong {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .tee-black {
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .tee-blue {
+            color: #3498db;
+            text-shadow: 1px 1px 2px rgba(52, 152, 219, 0.3);
+        }
+
+        .tee-white {
+            color: #95a5a6;
+            text-shadow: 1px 1px 2px rgba(149, 165, 166, 0.5);
+        }
+
+        .add-player-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .add-player-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .player-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .player-form.show {
+            display: block;
+        }
+
+        .player-form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .player-form-row input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+        }
+
+        .player-form-row input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .player-form-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .player-form-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .player-save-btn {
+            background: #0a5e2a;
+            color: white;
+        }
+
+        .player-save-btn:hover {
+            background: #0d7436;
+        }
+
+        .player-cancel-btn {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .player-cancel-btn:hover {
+            background: #d5dbdb;
+        }
+
+        .player-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .player-edit-btn,
+        .player-delete-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .player-edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .player-edit-btn:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .player-delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .player-delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .password-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .password-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .password-box p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-family: 'Georgia', serif;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        .password-input.error {
+            border-color: #e74c3c;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .password-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .password-btn.cancel {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .password-btn.cancel:hover {
+            background: #d5dbdb;
+        }
+
+        .password-btn.submit {
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+        }
+
+        .password-btn.submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .error-text {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-text.show {
+            display: block;
+        }
+
+        .admin-content {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #0a5e2a;
+        }
+
+        .admin-header h2 {
+            color: #2c3e50;
+            font-size: 2em;
+        }
+
+        .close-btn {
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #660000;
+            transform: scale(1.05);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: #d5dbdb;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0a5e2a;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .submit-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #0a5e2a 0%, #0d7436 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .weeks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .week-list-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .week-list-item:hover {
+            background: #ecf0f1;
+            transform: translateX(5px);
+        }
+
+        .week-list-item.special {
+            border-left-color: #e74c3c;
+        }
+
+        .week-list-info h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .week-list-info p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .week-list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .success-message {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .week-card {
+                padding: 20px;
+            }
+            
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+
+            .admin-nav {
+                top: 10px;
+                right: 10px;
+                flex-wrap: wrap;
+            }
+
+            .admin-btn,
+            .players-btn,
+            .players-list-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .admin-content,
+            .players-content,
+            .players-list-content {
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .admin-header h2,
+            .players-header h2,
+            .players-list-header h2 {
+                font-size: 1.5em;
+            }
+
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend-item {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .stats-cards {
+                flex-direction: column;
+            }
+
+            .players-table th,
+            .players-table td {
+                padding: 12px 10px;
+                font-size: 0.95em;
+            }
+        }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+
+            .week-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .week-list-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-nav">
+        <button class="players-list-btn" onclick="togglePlayersList()">📋 Players List</button>
+        <button class="admin-btn" onclick="toggleAdmin()">⚙️ Admin</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>⛳ QUICKSAND GOLF LEAGUE ⛳</h1>
+            <div class="season">Season 3: 2025-2026</div>
+        </div>
+        
+        <div class="main-content">
+            <div id="weekDisplay"></div>
+        </div>
+        
+        <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+    </div>
+
+    <!-- Password Prompt -->
+    <div class="password-prompt" id="passwordPrompt">
+        <div class="password-box">
+            <h3>🔒 Admin Access</h3>
+            <p>Enter password to continue</p>
+            <input 
+                type="password" 
+                class="password-input" 
+                id="passwordInput" 
+                placeholder="Password"
+            >
+            <div class="error-text" id="errorText">❌ Incorrect password</div>
+            <div class="password-buttons">
+                <button class="password-btn cancel" onclick="cancelPassword()">Cancel</button>
+                <button class="password-btn submit" onclick="submitPassword()">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Players List Panel -->
+    <div class="players-list-panel" id="playersListPanel">
+        <div class="players-list-content">
+            <div class="players-list-header">
+                <h2>📋 Players Ranking</h2>
+                <button class="close-btn" onclick="closePlayersList()">✕ Close</button>
+            </div>
+
+            <div class="legend">
+                <h3>Tee Color Legend</h3>
+                <div class="legend-item">
+                    <span class="tee-black">⬛ BLACK</span> - Handicap 0-2
+                </div>
+                <div class="legend-item">
+                    <span class="tee-blue">🟦 BLUE</span> - Handicap 3-11
+                </div>
+                <div class="legend-item">
+                    <span class="tee-white">⬜ WHITE</span> - Handicap 12+
+                </div>
+            </div>
+
+            <table class="players-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player Name</th>
+                        <th>Handicap</th>
+                        <th>Tee Color</th>
+                    </tr>
+                </thead>
+                <tbody id="playersListBody">
+                </tbody>
+            </table>
+
+            <div class="stats-cards" id="playersListStats"></div>
+        </div>
+    </div>
+
+    <!-- Scores Popup -->
+    <div class="scores-popup" id="scoresPopup">
+        <div class="scores-content">
+            <div class="scores-header">
+                <h2>⛳ Week Scores</h2>
+                <button class="close-btn" onclick="closeScoresPopup()">✕ Close</button>
+            </div>
+            <div class="scores-week-info" id="scoresWeekInfo"></div>
+            <table class="scores-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="scoresTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>⚙️ Admin Panel</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="close-btn" style="background: #f4c542; color: #0a5e2a;" onclick="exportData()">💾 Export Data</button>
+                    <button class="close-btn" onclick="closeAdminPanel()">✕ Close</button>
+                </div>
+            </div>
+
+            <div id="successMessage"></div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchAdminTab('add')">➕ Add Week</button>
+                <button class="tab-btn" onclick="switchAdminTab('edit')">✏️ Edit Weeks</button>
+                <button class="tab-btn" onclick="switchAdminTab('players')">👥 Manage Players</button>
+                <button class="tab-btn" onclick="switchAdminTab('scores')">📊 Manage Scores</button>
+            </div>
+
+            <!-- Add Week Tab -->
+            <div id="addTab" class="tab-content active">
+                <form id="addWeekForm" onsubmit="addWeek(event)">
+                    <div class="form-group">
+                        <label for="weekName">Week Name *</label>
+                        <input type="text" id="weekName" required placeholder="e.g., Week 20">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dates">Dates *</label>
+                        <input type="text" id="dates" required placeholder="e.g., Apr 13-19, 2026">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date *</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="course">Course Name *</label>
+                        <input type="text" id="course" required placeholder="e.g., Pebble Beach - Full 18">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="settings">Settings *</label>
+                        <textarea id="settings" required placeholder="e.g., TOUR settings, fastest greens, normal winds, amateur pin, 6 ft gimme"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialEvent">Special Event (Optional)</label>
+                        <input type="text" id="specialEvent" placeholder="e.g., Championship Tournament - 18 holes">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="isTournament">
+                            Tournament Week
+                        </label>
+                        <label>
+                            <input type="checkbox" id="isBreak">
+                            Season Break
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">➕ Add Week to Schedule</button>
+                </form>
+            </div>
+
+            <!-- Edit Weeks Tab -->
+            <div id="editTab" class="tab-content">
+                <div class="weeks-list" id="weeksList"></div>
+            </div>
+
+            <!-- Manage Players Tab -->
+            <div id="playersTab" class="tab-content">
+                <button class="add-player-btn" onclick="showPlayerForm()">➕ Add Player</button>
+
+                <div class="player-form" id="playerForm">
+                    <div class="player-form-row">
+                        <input type="text" id="playerName" placeholder="Player Name" required>
+                        <input type="number" id="playerHandicap" placeholder="Handicap" step="0.1" required>
+                    </div>
+                    <div class="player-form-buttons">
+                        <button class="player-cancel-btn" onclick="cancelPlayerForm()">Cancel</button>
+                        <button class="player-save-btn" onclick="savePlayer()">Save Player</button>
+                    </div>
+                </div>
+
+                <div class="players-grid" id="playersGrid"></div>
+            </div>
+
+            <!-- Manage Scores Tab -->
+            <div id="scoresTab" class="tab-content">
+                <div class="scores-management">
+                    <div class="form-group">
+                        <label for="scoreWeekSelect">Select Week *</label>
+                        <select id="scoreWeekSelect" onchange="loadWeekScores()">
+                            <option value="">-- Choose a Week --</option>
+                        </select>
+                    </div>
+
+                    <div id="scoresList" class="scores-edit-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // Declare all variables at top level first
+        let playersData, scheduleData, weekScores;
+        let editingPlayerIndex = null;
+        let editingIndex = null;
+        const CORRECT_PASSWORD = "Bowser";
+        let dataModified = false; // Track if data has been changed
+
+        // Mark data as modified
+        function markDataModified() {
+            dataModified = true;
+            const exportBtn = document.querySelector('[onclick="exportData()"]');
+            if (exportBtn) {
+                exportBtn.style.animation = 'pulse 1s infinite';
+                exportBtn.textContent = '💾 Export Data (Modified)';
+            }
+        }
+
+        // Data from data.js file - if external file doesn't load, use this fallback
+        if (typeof playersData === 'undefined') {
+            playersData = [
+                { name: "Khanh", handicap: 11 },
+                { name: "Paul", handicap: 21 },
+                { name: "Joey", handicap: 1 },
+                { name: "Nok", handicap: 16 },
+                { name: "JR", handicap: 17 },
+                { name: "Matty", handicap: 11 },
+                { name: "Scott", handicap: 16 },
+                { name: "Andrew", handicap: 1 },
+                { name: "Jerry", handicap: 5 },
+                { name: "Rem", handicap: 10 },
+                { name: "Sith", handicap: 0 },
+                { name: "Mark", handicap: 0 },
+                { name: "Tommy", handicap: 11 },
+                { name: "Jackson", handicap: 3 },
+                { name: "Tuan", handicap: 26 },
+                { name: "Phong", handicap: 5 }
+            ];
+        }
+
+        if (typeof scheduleData === 'undefined') {
+            scheduleData = [
+                {
+                    week: "Week 1",
+                    dates: "Nov 9-15, 2025",
+                    course: "Club72 LAKE - Front 9",
+                    settings: "Pro setting, Normal greens, normal winds, amateur pin, 6 ft gimme",
+                    startDate: new Date(2025, 10, 9)
+                },
+                {
+                    week: "Week 2",
+                    dates: "Nov 16-22, 2025",
+                    course: "Century21 - Back 9",
+                    settings: "Pro settings, Normal greens, Fastest winds, amateur pin, 6 ft gimmie",
+                    startDate: new Date(2025, 10, 16)
+                },
+                {
+                    week: "Week 3",
+                    dates: "Nov 23-29, 2025",
+                    course: "Muju - Back 9",
+                    settings: "TOUR settings, fastest greens, slow winds, amateur pin, 6 ft gimmie",
+                    startDate: new Date(2025, 10, 23)
+                },
+                {
+                    week: "Week 4",
+                    dates: "Nov 30 - Dec 6, 2025",
+                    course: "PurunSol - Front 9",
+                    settings: "TOUR settings, slowest greens, slow winds, amateur pin, 6 ft gimmie",
+                    startDate: new Date(2025, 10, 30)
+                },
+                {
+                    week: "Week 5",
+                    dates: "Dec 7-13, 2025",
+                    course: "Augusta National - USA",
+                    settings: "Tour settings, fastest greens, fastest winds, default pin",
+                    special: "The Masters - 18 holes",
+                    tournament: true,
+                    startDate: new Date(2025, 11, 7)
+                },
+                {
+                    week: "Week 6",
+                    dates: "Dec 14-20, 2025",
+                    course: "Ceragio - Back 9",
+                    settings: "TOUR settings, slowest greens, Fast winds",
+                    special: "SECRET SANTA: SANTA VS THE GRINCH",
+                    startDate: new Date(2025, 11, 14)
+                },
+                {
+                    week: "Week 7",
+                    dates: "Dec 21-27, 2025",
+                    course: "Bear Creek - Front 9",
+                    settings: "TOUR settings, FASTEST greens, STRONG winds, 0 Mulligans",
+                    startDate: new Date(2025, 11, 21)
+                },
+                {
+                    week: "Week 8",
+                    dates: "Dec 28 - Jan 3, 2026",
+                    course: "Royal Island - Front 9",
+                    settings: "TOUR settings, normal greens, WEAK winds, 0 mulligans",
+                    startDate: new Date(2025, 11, 28)
+                },
+                {
+                    week: "Week 9",
+                    dates: "Jan 4-10, 2026",
+                    course: "Ferrum Club - Back 9",
+                    settings: "Tour setting, Fastest greens, WEAK winds, 1 mulligan",
+                    startDate: new Date(2026, 0, 4)
+                },
+                {
+                    week: "Week 10",
+                    dates: "Jan 11-17, 2026",
+                    course: "Torrey Pines - USA - Full 18",
+                    settings: "Fastest greens, Fastest winds, STRONG winds",
+                    special: "US Open - 18 holes",
+                    tournament: true,
+                    startDate: new Date(2026, 0, 11)
+                },
+                {
+                    week: "Week 11",
+                    dates: "Jan 18-24, 2026",
+                    course: "TBD - Back 9 - White",
+                    settings: "Details TBD",
+                    startDate: new Date(2026, 0, 18)
+                },
+                {
+                    week: "Week 12",
+                    dates: "Jan 25-31, 2026",
+                    course: "TBD - Back 9 - White",
+                    settings: "Details TBD",
+                    startDate: new Date(2026, 0, 25)
+                },
+                {
+                    week: "Week 13",
+                    dates: "Feb 1-7, 2026",
+                    course: "TBD - Back 9 - White",
+                    settings: "Details TBD",
+                    startDate: new Date(2026, 1, 1)
+                },
+                {
+                    week: "Week 14",
+                    dates: "Feb 8-14, 2026",
+                    course: "TBD",
+                    settings: "Details TBD",
+                    startDate: new Date(2026, 1, 8)
+                },
+                {
+                    week: "Week 15",
+                    dates: "Feb 15-21, 2026",
+                    course: "St. Andrew's - UK - Black - Full 18",
+                    settings: "Details TBD",
+                    special: "The Open - 18 holes",
+                    tournament: true,
+                    startDate: new Date(2026, 1, 15)
+                },
+                {
+                    week: "Week 16",
+                    dates: "Feb 22-28, 2026",
+                    course: "TBD",
+                    settings: "Details TBD",
+                    startDate: new Date(2026, 1, 22)
+                },
+                {
+                    week: "Week 17",
+                    dates: "Mar 1-8, 2026",
+                    course: "TBD",
+                    settings: "No repeats, No Par 3's/Junior, Par 72 or higher",
+                    startDate: new Date(2026, 2, 1)
+                },
+                {
+                    week: "Week 18",
+                    dates: "Mar 2-8, 2026",
+                    course: "Break 60 Red Tee Scramble",
+                    settings: "Details TBD",
+                    special: "Ryder Cup - 18 holes (Team Event) - Teams TBA",
+                    startDate: new Date(2026, 2, 2)
+                },
+                {
+                    week: "Week 19",
+                    dates: "Mar 9-15, 2026",
+                    course: "TPC Sawgrass - USA - Black - Full 18",
+                    settings: "Top 2 players by Mar 1 will draft their teams",
+                    startDate: new Date(2026, 2, 9)
+                },
+                {
+                    week: "Season Break",
+                    dates: "Mar 16-22, 2026",
+                    course: "OFF WEEK",
+                    settings: "Season Break",
+                    isBreak: true,
+                    startDate: new Date(2026, 2, 16)
+                },
+                {
+                    week: "Extension Week 1",
+                    dates: "Mar 23-29, 2026",
+                    course: "Season 2 Extension - 18 Holes",
+                    settings: "Fastest greens, no winds, 1 mulligan per 9, 6 ft gimmies",
+                    startDate: new Date(2026, 2, 23)
+                },
+                {
+                    week: "Extension Week 2",
+                    dates: "Mar 30 - Apr 5, 2026",
+                    course: "Season 2 Extension - 18 Holes",
+                    settings: "Slowest greens, fastest winds, 1 mulligan per 9, 2ft gimmies",
+                    startDate: new Date(2026, 2, 30)
+                },
+                {
+                    week: "Extension Week 3",
+                    dates: "Apr 6-12, 2026",
+                    course: "Season 2 Extension - 18 Holes",
+                    settings: "Fastest greens, fastest winds, 1 mulligan per 9, 2ft gimmies",
+                    startDate: new Date(2026, 3, 6)
+                }
+            ];
+        }
+
+        if (typeof weekScores === 'undefined') {
+            weekScores = {
+                0: {
+                    "Andrew": -4, "Jackson": 6, "Nok": -5, "Scott": 7, "Sith": -5,
+                    "Jerry": -3, "Tommy": 5, "Mark": -3, "Joey": 0, "Phong": -1,
+                    "Matty": -7, "Khanh": 1, "Paul": 0, "JR": -1, "Tuan": -1, "Rem": -5
+                },
+                1: {
+                    "Andrew": 7, "Jackson": 10, "Nok": 12, "Scott": 15, "Sith": 14,
+                    "Jerry": 6, "Tommy": 18, "Mark": 18, "Joey": 9, "Phong": 12,
+                    "Matty": -2, "Paul": 4, "JR": -4, "Tuan": 9, "Rem": 3
+                },
+                2: {
+                    "Andrew": 3, "Jackson": -3, "Nok": 17, "Scott": 3, "Sith": 18,
+                    "Jerry": 2, "Tommy": 4, "Mark": 3, "Joey": 3, "Phong": 11,
+                    "Matty": 0, "Khanh": 7, "Paul": 8, "JR": 10, "Tuan": 10, "Rem": 3
+                },
+                3: {
+                    "Andrew": 9, "Nok": 7, "Scott": 6, "Sith": 0, "Jerry": -6,
+                    "Tommy": 13, "Joey": 3, "Phong": 3, "Matty": 8, "Paul": 8,
+                    "JR": 16, "Tuan": 8, "Rem": 15
+                },
+                8: {
+                    "Andrew": 10, "Jackson": 0, "Nok": 8, "Scott": 9, "Jerry": 8,
+                    "Tommy": 9, "Joey": 3, "Phong": 8, "Matty": 9, "Paul": 8,
+                    "JR": 9, "Tuan": 4, "Rem": 8
+                },
+                9: {
+                    "Nok": 7, "Scott": 2, "Jerry": 2, "Tommy": 2, "Phong": 5,
+                    "Matty": 3, "Paul": 8, "JR": 4, "Rem": 9
+                }
+            };
+        }
+
+        function getCurrentWeekIndex() {
+            const today = new Date();
+            
+            for (let i = 0; i < scheduleData.length; i++) {
+                const weekStart = scheduleData[i].startDate;
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                
+                if (today >= weekStart && today <= weekEnd) {
+                    return i;
+                }
+            }
+            
+            // If no current week, find the next upcoming week
+            for (let i = 0; i < scheduleData.length; i++) {
+                if (today < scheduleData[i].startDate) {
+                    return i;
+                }
+            }
+            
+            return 0; // Default to first week
+        }
+
+        function createWeekCard(week, isCurrent, weekIndex) {
+            let cardClass = 'week-card';
+            if (week.tournament || week.special) cardClass += ' special';
+            if (week.isBreak) cardClass += ' break';
+            if (isCurrent) cardClass += ' current';
+
+            let html = `
+                <div class="${cardClass}" onclick="openScoresPopup(${weekIndex})">
+                    <div class="week-header">
+                        <div class="week-number"><span class="golf-ball"></span>${week.week}</div>
+                        <div class="week-dates">${week.dates}</div>
+                    </div>
+            `;
+
+            if (isCurrent) {
+                html += `<div class="current-badge">📍 CURRENT WEEK</div>`;
+            }
+
+            if (week.tournament) {
+                html += `<div class="tournament-badge">🏆 TOURNAMENT WEEK</div>`;
+            }
+
+            html += `
+                    <div class="course-info">
+                        <div class="course-name">${week.course}</div>
+                        <div class="course-details">
+            `;
+
+            const settings = week.settings.split(',');
+            settings.forEach(setting => {
+                html += `<span class="detail-item">${setting.trim()}</span>`;
+            });
+
+            html += `
+                        </div>
+                    </div>
+            `;
+
+            if (week.special) {
+                html += `<div class="special-event">🎯 ${week.special}</div>`;
+            }
+
+            // Add winner display if scores exist for this week
+            const scores = weekScores[weekIndex];
+            if (scores && Object.keys(scores).length > 0) {
+                const sortedScores = Object.entries(scores).sort((a, b) => a[1] - b[1]);
+                const winner = sortedScores[0];
+                const winnerName = winner[0];
+                const winnerScore = winner[1];
+                
+                let scoreDisplay = 'E';
+                if (winnerScore < 0) {
+                    scoreDisplay = winnerScore.toString();
+                } else if (winnerScore > 0) {
+                    scoreDisplay = '+' + winnerScore;
+                }
+
+                html += `
+                    <div class="week-winner">
+                        <span class="winner-text">
+                            <strong>${winnerName}</strong> 👑 ${scoreDisplay}
+                        </span>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+
+            return html;
+        }
+
+        function displayAllWeeks() {
+            const display = document.getElementById('weekDisplay');
+            const currentWeekIndex = getCurrentWeekIndex();
+            
+            let html = '<div class="weeks-container">';
+            
+            // Add current week first
+            html += createWeekCard(scheduleData[currentWeekIndex], true, currentWeekIndex);
+            
+            // Add all other weeks
+            scheduleData.forEach((week, index) => {
+                if (index !== currentWeekIndex) {
+                    html += createWeekCard(week, false, index);
+                }
+            });
+            
+            html += '</div>';
+            display.innerHTML = html;
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show scroll button when scrolled down
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scrollTop');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        displayAllWeeks();
+
+
+        function openScoresPopup(weekIndex) {
+            const week = scheduleData[weekIndex];
+            const scores = weekScores[weekIndex];
+
+            if (!scores || Object.keys(scores).length === 0) {
+                alert('No scores available for this week yet.');
+                return;
+            }
+
+            // Update week info
+            document.getElementById('scoresWeekInfo').innerHTML = `
+                <h3>${week.week}</h3>
+                <p><strong>Course:</strong> ${week.course}</p>
+                <p><strong>Dates:</strong> ${week.dates}</p>
+            `;
+
+            // Sort players by score (lowest to highest)
+            const sortedScores = Object.entries(scores).sort((a, b) => a[1] - b[1]);
+
+            // Create table rows
+            const tbody = document.getElementById('scoresTableBody');
+            tbody.innerHTML = '';
+
+            const bestScore = sortedScores[0][1];
+
+            sortedScores.forEach(([playerName, score], index) => {
+                const row = document.createElement('tr');
+                if (score === bestScore) {
+                    row.classList.add('score-best');
+                }
+
+                let scoreClass = 'score-even';
+                let scoreDisplay = 'E';
+                
+                if (score < 0) {
+                    scoreClass = 'score-under';
+                    scoreDisplay = score.toString();
+                } else if (score > 0) {
+                    scoreClass = 'score-over';
+                    scoreDisplay = '+' + score;
+                } else {
+                    scoreDisplay = 'E';
+                }
+
+                row.innerHTML = `
+                    <td style="text-align: center; font-weight: bold; color: #7f8c8d;">${index + 1}</td>
+                    <td class="player-name-col">${playerName}</td>
+                    <td class="score-col ${scoreClass}">${scoreDisplay}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('scoresPopup').classList.add('show');
+        }
+
+        function closeScoresPopup() {
+            document.getElementById('scoresPopup').classList.remove('show');
+        }
+
+        // Players Panel Functions
+
+        // Players List Panel Functions
+        function togglePlayersList() {
+            const panel = document.getElementById('playersListPanel');
+            const btn = document.querySelector('.players-list-btn');
+            panel.classList.toggle('show');
+            btn.classList.toggle('active');
+            
+            if (panel.classList.contains('show')) {
+                displayPlayersList();
+            }
+        }
+
+        function closePlayersList() {
+            document.getElementById('playersListPanel').classList.remove('show');
+            document.querySelector('.players-list-btn').classList.remove('active');
+        }
+
+        // Player Management Functions (inside Admin Panel)
+        function displayPlayers() {
+            const grid = document.getElementById('playersGrid');
+            grid.innerHTML = '';
+
+            // Create array with original indices
+            const playersWithIndices = playersData.map((player, index) => ({
+                ...player,
+                originalIndex: index
+            }));
+
+            // Sort by name
+            playersWithIndices.sort((a, b) => a.name.localeCompare(b.name));
+
+            playersWithIndices.forEach((player) => {
+                // Determine tee color based on handicap
+                let teeColor = '';
+                if (player.handicap >= 0 && player.handicap <= 2) {
+                    teeColor = 'BLACK';
+                } else if (player.handicap >= 3 && player.handicap <= 11) {
+                    teeColor = 'BLUE';
+                } else if (player.handicap >= 12) {
+                    teeColor = 'WHITE';
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.innerHTML = `
+                    <div class="player-actions">
+                        <button class="player-edit-btn" data-index="${player.originalIndex}" title="Edit">✏️</button>
+                        <button class="player-delete-btn" data-index="${player.originalIndex}" title="Delete">🗑️</button>
+                    </div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-handicap">Handicap: <strong>${player.handicap}</strong></div>
+                    <div class="player-tee">Tee: <strong class="tee-${teeColor.toLowerCase()}">${teeColor}</strong></div>
+                `;
+                
+                // Add event listeners
+                const editBtn = card.querySelector('.player-edit-btn');
+                const deleteBtn = card.querySelector('.player-delete-btn');
+                
+                editBtn.addEventListener('click', function() {
+                    editPlayer(parseInt(this.getAttribute('data-index')));
+                });
+                
+                deleteBtn.addEventListener('click', function() {
+                    deletePlayer(parseInt(this.getAttribute('data-index')));
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function showPlayerForm() {
+            document.getElementById('playerForm').classList.add('show');
+            document.getElementById('playerName').value = '';
+            document.getElementById('playerHandicap').value = '';
+            editingPlayerIndex = null;
+            document.getElementById('playerName').focus();
+        }
+
+        function cancelPlayerForm() {
+            document.getElementById('playerForm').classList.remove('show');
+            editingPlayerIndex = null;
+        }
+
+        function savePlayer() {
+            const name = document.getElementById('playerName').value.trim();
+            const handicap = parseFloat(document.getElementById('playerHandicap').value);
+
+            if (!name || isNaN(handicap)) {
+                alert('Please enter both name and handicap');
+                return;
+            }
+
+            if (editingPlayerIndex !== null) {
+                // Update existing player
+                playersData[editingPlayerIndex] = { name, handicap };
+            } else {
+                // Add new player
+                playersData.push({ name, handicap });
+            }
+
+            markDataModified();
+            cancelPlayerForm();
+            displayPlayers();
+        }
+
+        function editPlayer(index) {
+            editingPlayerIndex = index;
+            const player = playersData[index];
+            
+            document.getElementById('playerName').value = player.name;
+            document.getElementById('playerHandicap').value = player.handicap;
+            document.getElementById('playerForm').classList.add('show');
+            document.getElementById('playerName').focus();
+        }
+
+        function deletePlayer(index) {
+            console.log('Delete player called with index:', index);
+            console.log('Player at index:', playersData[index]);
+            console.log('Players before delete:', playersData.length);
+            
+            if (confirm(`Are you sure you want to delete ${playersData[index].name}?`)) {
+                playersData.splice(index, 1);
+                console.log('Players after delete:', playersData.length);
+                markDataModified();
+                displayPlayers();
+            }
+        }
+
+        function getTeeColorForList(handicap) {
+            if (handicap >= 0 && handicap <= 2) {
+                return { color: 'BLACK', class: 'black' };
+            } else if (handicap >= 3 && handicap <= 11) {
+                return { color: 'BLUE', class: 'blue' };
+            } else {
+                return { color: 'WHITE', class: 'white' };
+            }
+        }
+
+        function displayPlayersList() {
+            const tbody = document.getElementById('playersListBody');
+            tbody.innerHTML = '';
+            
+            // Sort players by handicap (lowest to highest)
+            const sortedPlayers = [...playersData].sort((a, b) => a.handicap - b.handicap);
+
+            sortedPlayers.forEach((player, index) => {
+                const tee = getTeeColorForList(player.handicap);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="table-player-name">${index + 1}</td>
+                    <td class="table-player-name">${player.name}</td>
+                    <td class="table-player-handicap">${player.handicap}</td>
+                    <td><span class="table-player-tee ${tee.class}">${tee.color}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            displayPlayersListStats();
+        }
+
+        function displayPlayersListStats() {
+            const statsDiv = document.getElementById('playersListStats');
+            
+            let blackCount = 0;
+            let blueCount = 0;
+            let whiteCount = 0;
+
+            playersData.forEach(player => {
+                const tee = getTeeColorForList(player.handicap);
+                if (tee.color === 'BLACK') blackCount++;
+                else if (tee.color === 'BLUE') blueCount++;
+                else if (tee.color === 'WHITE') whiteCount++;
+            });
+
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <h4>Total Players</h4>
+                    <div class="number">${playersData.length}</div>
+                </div>
+                <div class="stat-card black-tee">
+                    <h4>Black Tees</h4>
+                    <div class="number">${blackCount}</div>
+                </div>
+                <div class="stat-card blue-tee">
+                    <h4>Blue Tees</h4>
+                    <div class="number">${blueCount}</div>
+                </div>
+                <div class="stat-card white-tee">
+                    <h4>White Tees</h4>
+                    <div class="number">${whiteCount}</div>
+                </div>
+            `;
+        }
+
+        function closePlayersPanel() {
+            document.getElementById('playersPanel').classList.remove('show');
+            document.querySelector('.players-btn').classList.remove('active');
+        }
+
+        // Admin Panel Functions
+
+        function exportData() {
+            // Create the data.js file content
+            const dataContent = `// Quicksand Golf League - Season 3 Data File
+// This file contains all players, schedule, and scores data
+
+// Players Data
+let playersData = ${JSON.stringify(playersData, null, 4)};
+
+// Schedule Data
+let scheduleData = ${JSON.stringify(scheduleData, (key, value) => {
+    if (key === 'startDate' && value instanceof Date) {
+        return `new Date(${value.getFullYear()}, ${value.getMonth()}, ${value.getDate()})`;
+    }
+    return value;
+}, 4).replace(/"new Date\((\d+), (\d+), (\d+)\)"/g, 'new Date($1, $2, $3)')};
+
+// Scores Data - mapped by week index
+let weekScores = ${JSON.stringify(weekScores, null, 4)};
+
+// Export data for use in the app
+// If using as a module, uncomment the lines below:
+// export { playersData, scheduleData, weekScores };
+`;
+
+            // Create a blob and download it
+            const blob = new Blob([dataContent], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.js';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccessMessage('✓ Data exported! Replace the old data.js file with the downloaded one.');
+        }
+
+        function toggleAdmin() {
+            // Show password prompt for admin
+            document.getElementById('passwordPrompt').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorText').classList.remove('show');
+            document.getElementById('passwordInput').classList.remove('error');
+            setTimeout(() => {
+                document.getElementById('passwordInput').focus();
+            }, 100);
+        }
+
+        function submitPassword() {
+            const input = document.getElementById('passwordInput');
+            const password = input.value;
+            
+            if (password === CORRECT_PASSWORD) {
+                // Correct password - hide prompt and show admin panel
+                document.getElementById('passwordPrompt').classList.remove('show');
+                document.getElementById('adminPanel').classList.add('show');
+                document.querySelector('.admin-btn').classList.add('active');
+                loadWeeksList();
+                
+                currentPasswordTarget = null;
+            } else {
+                // Wrong password - show error
+                document.getElementById('errorText').classList.add('show');
+                input.classList.add('error');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function cancelPassword() {
+            document.getElementById('passwordPrompt').classList.remove('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorText').classList.remove('show');
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPassword();
+                }
+            });
+        });
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('show');
+            document.querySelector('.admin-btn').classList.remove('active');
+        }
+
+        function switchAdminTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active to clicked button
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            // Update tab content
+            document.getElementById('addTab').classList.remove('active');
+            document.getElementById('editTab').classList.remove('active');
+            document.getElementById('playersTab').classList.remove('active');
+            document.getElementById('scoresTab').classList.remove('active');
+
+            if (tab === 'add') {
+                document.getElementById('addTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            } else if (tab === 'edit') {
+                document.getElementById('editTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                loadWeeksList();
+            } else if (tab === 'players') {
+                document.getElementById('playersTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[2].classList.add('active');
+                displayPlayers();
+            } else if (tab === 'scores') {
+                document.getElementById('scoresTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[3].classList.add('active');
+                populateWeekDropdown();
+            }
+        }
+
+        function showSuccessMessage(message) {
+            const msgDiv = document.getElementById('successMessage');
+            msgDiv.innerHTML = `<div class="success-message">${message}</div>`;
+            setTimeout(() => {
+                msgDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function addWeek(event) {
+            event.preventDefault();
+
+            const newWeek = {
+                week: document.getElementById('weekName').value,
+                dates: document.getElementById('dates').value,
+                course: document.getElementById('course').value,
+                settings: document.getElementById('settings').value,
+                special: document.getElementById('specialEvent').value || undefined,
+                tournament: document.getElementById('isTournament').checked,
+                isBreak: document.getElementById('isBreak').checked,
+                startDate: new Date(document.getElementById('startDate').value)
+            };
+
+            if (editingIndex !== null) {
+                // Update existing week
+                scheduleData[editingIndex] = newWeek;
+                showSuccessMessage('✓ Week updated successfully!');
+                editingIndex = null;
+            } else {
+                // Add new week
+                scheduleData.push(newWeek);
+                showSuccessMessage('✓ Week added successfully!');
+            }
+
+            markDataModified();
+
+            // Reset form
+            document.getElementById('addWeekForm').reset();
+            
+            // Refresh display
+            displayAllWeeks();
+            loadWeeksList();
+        }
+
+        function loadWeeksList() {
+            const list = document.getElementById('weeksList');
+            list.innerHTML = '';
+
+            scheduleData.forEach((week, index) => {
+                const itemClass = week.tournament || week.special ? 'week-list-item special' : 'week-list-item';
+                
+                const item = document.createElement('div');
+                item.className = itemClass;
+                item.innerHTML = `
+                    <div class="week-list-info">
+                        <h4>${week.week}</h4>
+                        <p><strong>Dates:</strong> ${week.dates}</p>
+                        <p><strong>Course:</strong> ${week.course}</p>
+                        ${week.special ? `<p><strong>Special:</strong> ${week.special}</p>` : ''}
+                    </div>
+                    <div class="week-list-actions">
+                        <button class="edit-btn" onclick="editWeek(${index})">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteWeek(${index})">🗑️ Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function editWeek(index) {
+            editingIndex = index;
+            const week = scheduleData[index];
+
+            // Switch to add tab
+            document.getElementById('addTab').classList.add('active');
+            document.getElementById('editTab').classList.remove('active');
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+
+            // Populate form
+            document.getElementById('weekName').value = week.week;
+            document.getElementById('dates').value = week.dates;
+            document.getElementById('startDate').value = week.startDate.toISOString().split('T')[0];
+            document.getElementById('course').value = week.course;
+            document.getElementById('settings').value = week.settings;
+            document.getElementById('specialEvent').value = week.special || '';
+            document.getElementById('isTournament').checked = week.tournament || false;
+            document.getElementById('isBreak').checked = week.isBreak || false;
+
+            // Update button text
+            document.querySelector('.submit-btn').textContent = '💾 Update Week';
+
+            // Scroll to top of admin panel
+            document.getElementById('adminPanel').scrollTop = 0;
+        }
+
+        function deleteWeek(index) {
+            if (confirm(`Are you sure you want to delete ${scheduleData[index].week}?`)) {
+                scheduleData.splice(index, 1);
+                markDataModified();
+                showSuccessMessage('✓ Week deleted successfully!');
+                displayAllWeeks();
+                loadWeeksList();
+            }
+        }
+
+        // Reset form when switching back to add tab
+        document.getElementById('addWeekForm').addEventListener('reset', () => {
+            editingIndex = null;
+            document.querySelector('.submit-btn').textContent = '➕ Add Week to Schedule';
+        });
+
+        // Scores Management Functions
+        function populateWeekDropdown() {
+            const select = document.getElementById('scoreWeekSelect');
+            select.innerHTML = '<option value="">-- Choose a Week --</option>';
+            
+            scheduleData.forEach((week, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${week.week} - ${week.course}`;
+                select.appendChild(option);
+            });
+        }
+
+        function loadWeekScores() {
+            const weekIndex = parseInt(document.getElementById('scoreWeekSelect').value);
+            const scoresList = document.getElementById('scoresList');
+            
+            if (isNaN(weekIndex)) {
+                scoresList.innerHTML = '';
+                return;
+            }
+
+            const week = scheduleData[weekIndex];
+            const scores = weekScores[weekIndex] || {};
+
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #0a5e2a; margin-bottom: 10px;">${week.week} - ${week.course}</h3>
+                    <button class="add-all-scores-btn" onclick="addMissingPlayers(${weekIndex})">
+                        ➕ Add All Players
+                    </button>
+                </div>
+            `;
+
+            // Get all players who have scores
+            const playersWithScores = Object.keys(scores);
+            
+            if (playersWithScores.length === 0) {
+                html += '<div class="no-scores-message">No scores entered for this week yet. Click "Add All Players" to get started.</div>';
+            } else {
+                // Sort players by score
+                const sortedPlayers = playersWithScores.sort((a, b) => scores[a] - scores[b]);
+                
+                sortedPlayers.forEach(playerName => {
+                    const score = scores[playerName];
+                    html += `
+                        <div class="score-item">
+                            <div class="score-item-player">${playerName}</div>
+                            <input 
+                                type="number" 
+                                class="score-item-input" 
+                                id="score_${weekIndex}_${playerName}" 
+                                value="${score}"
+                                placeholder="Score"
+                            >
+                            <div class="score-item-actions">
+                                <button class="score-save-btn" onclick="saveScore(${weekIndex}, '${playerName}')">
+                                    💾 Save
+                                </button>
+                                <button class="score-remove-btn" onclick="removeScore(${weekIndex}, '${playerName}')">
+                                    🗑️ Remove
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            scoresList.innerHTML = html;
+        }
+
+        function addMissingPlayers(weekIndex) {
+            if (!weekScores[weekIndex]) {
+                weekScores[weekIndex] = {};
+            }
+
+            // Add all players with default score of 0
+            playersData.forEach(player => {
+                if (weekScores[weekIndex][player.name] === undefined) {
+                    weekScores[weekIndex][player.name] = 0;
+                }
+            });
+
+            markDataModified();
+            loadWeekScores();
+            showSuccessMessage('✓ All players added to this week!');
+        }
+
+        function saveScore(weekIndex, playerName) {
+            const inputId = `score_${weekIndex}_${playerName}`;
+            const input = document.getElementById(inputId);
+            const score = parseInt(input.value);
+
+            if (isNaN(score)) {
+                alert('Please enter a valid score');
+                return;
+            }
+
+            if (!weekScores[weekIndex]) {
+                weekScores[weekIndex] = {};
+            }
+
+            weekScores[weekIndex][playerName] = score;
+            markDataModified();
+            showSuccessMessage(`✓ Score saved for ${playerName}!`);
+            loadWeekScores();
+            displayAllWeeks(); // Refresh to update winner displays
+        }
+
+        function removeScore(weekIndex, playerName) {
+            if (confirm(`Remove score for ${playerName} from this week?`)) {
+                if (weekScores[weekIndex]) {
+                    delete weekScores[weekIndex][playerName];
+                }
+                markDataModified();
+                showSuccessMessage(`✓ Score removed for ${playerName}`);
+                loadWeekScores();
+                displayAllWeeks(); // Refresh to update winner displays
+            }
+        }
+    </script>
+</body>
+</html>

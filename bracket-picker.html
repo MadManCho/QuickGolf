@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foreverland · Bracket Picks</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#C8102E;--navy:#0A1628;--navy-mid:#112040;--blue:#1B3A6B;
+  --gold:#F0A500;--gold-l:#FFD060;--silver:#C8C8C8;--bronze:#C87A3A;
+  --green:#00C46A;--bg:#070E1C;--surface:#0D1A30;--surface2:#132038;
+  --surface3:#1A2A48;--text:#F0F4FF;--muted:#7A90B8;--border:#1E3055;
+  --font-d:'Barlow Condensed',sans-serif;--font-b:'Barlow',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;-webkit-tap-highlight-color:transparent;}
+
+/* HEADER */
+.header{background:var(--navy);border-bottom:2px solid var(--red);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.header-title{font-family:var(--font-d);font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);}
+.header-title span{color:var(--red);}
+.header-user{margin-left:auto;font-family:var(--font-d);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);}
+.header-user.active{color:var(--gold);}
+
+/* LOGIN SCREEN */
+.login-screen{min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px 28px;width:100%;max-width:360px;}
+.login-title{font-family:var(--font-d);font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.login-label{font-family:var(--font-d);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;display:block;}
+.login-select,.login-pin{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-b);font-size:15px;padding:10px 14px;margin-bottom:16px;outline:none;-webkit-appearance:none;}
+.login-select:focus,.login-pin:focus{border-color:var(--red);}
+.login-pin{font-size:24px;letter-spacing:0.3em;text-align:center;font-weight:700;}
+.login-btn{width:100%;background:var(--red);color:#fff;font-family:var(--font-d);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:12px;border:none;border-radius:6px;cursor:pointer;margin-top:4px;transition:background 0.15s;}
+.login-btn:hover{background:var(--red);opacity:0.85;}
+.login-err{color:var(--red);font-size:13px;margin-top:10px;font-weight:600;display:none;}
+
+/* MAIN */
+.main{max-width:700px;margin:0 auto;padding:24px 16px 80px;}
+
+/* ROUND SECTION */
+.round-section{margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.round-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:linear-gradient(90deg,var(--navy-mid),var(--blue));border-bottom:2px solid var(--red);}
+.round-name{font-family:var(--font-d);font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#fff;}
+.round-pts{font-family:var(--font-d);font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.06em;}
+.round-info{font-size:12px;color:var(--muted);padding:8px 16px 6px;font-style:italic;}
+.round-picks{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px 12px;}
+.round-pick-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:var(--font-d);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;color:var(--muted);transition:all 0.15s;text-align:left;}
+.round-pick-btn:hover{border-color:rgba(200,16,46,0.4);color:var(--text);}
+.round-pick-btn.selected{background:rgba(200,16,46,0.12);border-color:var(--red);color:var(--text);}
+.round-pick-btn.champion-btn{grid-column:1/-1;justify-content:center;padding:12px;font-size:14px;border-color:var(--gold);}
+.round-pick-btn.champion-btn.selected{background:rgba(240,165,0,0.15);border-color:var(--gold);color:var(--gold);}
+.pick-flag{font-size:18px;flex-shrink:0;}
+.pick-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pick-check{font-size:14px;flex-shrink:0;opacity:0;transition:opacity 0.15s;}
+.round-pick-btn.selected .pick-check{opacity:1;}
+
+/* LOCKED state */
+.round-pick-btn.locked{opacity:0.5;cursor:default;pointer-events:none;}
+.round-pick-btn.locked.selected{opacity:1;}
+
+/* COUNT badge */
+.round-count{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--surface3);color:var(--muted);}
+.round-count.done{background:rgba(0,196,106,0.15);color:var(--green);}
+
+/* SAVE BUTTON */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid var(--border);padding:12px 20px;display:flex;gap:12px;align-items:center;}
+.save-btn{flex:1;background:var(--red);color:#fff;font-family:var(--font-d);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:12px;border:none;border-radius:6px;cursor:pointer;transition:background 0.15s;}
+.save-btn:disabled{opacity:0.4;cursor:default;}
+.save-status{font-size:12px;color:var(--muted);font-weight:600;}
+.save-status.ok{color:var(--green);}
+
+/* PROGRESS */
+.progress-bar-wrap{height:3px;background:var(--surface3);margin-bottom:20px;border-radius:2px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--red);border-radius:2px;transition:width 0.3s;}
+.progress-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+
+@media(max-width:480px){
+  .round-picks{grid-template-columns:1fr;}
+  .round-pick-btn.champion-btn{grid-column:1;}
+  .login-card{padding:24px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="font-size:22px;">⚽</div>
+  <div class="header-title">Foreverland <span>2026</span></div>
+  <div class="header-user" id="header-user">Not logged in</div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-title">Bracket <span style="color:var(--red)">Picks</span></div>
+    <div class="login-sub">Select your name and enter your PIN to submit your knockout bracket.</div>
+    <label class="login-label">Your name</label>
+    <select class="login-select" id="login-name">
+      <option value="">— Select your name —</option>
+    </select>
+    <label class="login-label">4-digit PIN</label>
+    <input class="login-pin" id="login-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+    <button class="login-btn" onclick="doLogin()">Enter Bracket →</button>
+    <div class="login-err" id="login-err">Incorrect PIN. Try again.</div>
+  </div>
+</div>
+
+<!-- PICKER -->
+<div id="picker-screen" style="display:none">
+  <div class="main">
+    <div class="progress-label" id="progress-label"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div id="rounds-container"></div>
+  </div>
+  <div class="save-bar">
+    <div class="save-status" id="save-status">Make your picks above</div>
+    <button class="save-btn" id="save-btn" onclick="savePicks()" disabled>Save Picks</button>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// Passwords: name → 4-digit PIN
+const PASSWORDS = {
+  "Matty chom":    "1234",
+  "Sambath":       "2345",
+  "Master":        "3456",
+  "AJ":            "4567",
+  "Huy":           "5678",
+  "Minh":          "6789",
+  "Sith":          "7890",
+  "Tigers nephew": "8901",
+  "Rolando":       "9012",
+  "Peter H":       "0123",
+  "Shanny":        "1357",
+  "Noks":          "2468",
+  "Carlo":         "3579",
+};
+
+const FLAGS = {
+  "MEXICO":"🇲🇽","SOUTH AFRICA":"🇿🇦","KOREA REPUBLIC":"🇰🇷","CZECHIA":"🇨🇿",
+  "CANADA":"🇨🇦","BOSNIA":"🇧🇦","QATAR":"🇶🇦","SWITZERLAND":"🇨🇭",
+  "BRAZIL":"🇧🇷","MOROCCO":"🇲🇦","HAITI":"🇭🇹","SCOTLAND":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  "USA":"🇺🇸","PARAGUAY":"🇵🇾","AUSTRALIA":"🇦🇺","TURKIYE":"🇹🇷",
+  "GERMANY":"🇩🇪","CURACAO":"🇨🇼","COTE DIVOIRE":"🇨🇮","ECUADOR":"🇪🇨",
+  "NETHERLANDS":"🇳🇱","JAPAN":"🇯🇵","SWEDEN":"🇸🇪","TUNISIA":"🇹🇳",
+  "BELGIUM":"🇧🇪","EGYPT":"🇪🇬","IRAN":"🇮🇷","NEW ZEALAND":"🇳🇿",
+  "SPAIN":"🇪🇸","CABO VERDE":"🇨🇻","SAUDI ARABIA":"🇸🇦","URUGUAY":"🇺🇾",
+  "FRANCE":"🇫🇷","SENEGAL":"🇸🇳","IRAQ":"🇮🇶","NORWAY":"🇳🇴",
+  "ARGENTINA":"🇦🇷","ALGERIA":"🇩🇿","AUSTRIA":"🇦🇹","JORDAN":"🇯🇴",
+  "PORTUGAL":"🇵🇹","CONGO DR":"🇨🇩","UZBEKISTAN":"🇺🇿","COLOMBIA":"🇨🇴",
+  "ENGLAND":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","CROATIA":"🇭🇷","GHANA":"🇬🇭","PANAMA":"🇵🇦"
+};
+
+const ALL_TEAMS = Object.keys(FLAGS);
+
+const ROUNDS = [
+  { key:'R32',      label:'Round of 32',    pts:2,  count:16, info:'Pick 16 teams to advance from the Round of 32' },
+  { key:'R16',      label:'Round of 16',    pts:4,  count:8,  info:'Pick 8 Quarter-Final qualifiers' },
+  { key:'QF',       label:'Quarter-Finals', pts:6,  count:4,  info:'Pick 4 Semi-Final qualifiers' },
+  { key:'SF',       label:'Semi-Finals',    pts:10, count:2,  info:'Pick 2 teams to reach the Final' },
+  { key:'FINAL',    label:'Final',          pts:15, count:1,  info:'Pick 1 team to WIN the Final' },
+  { key:'CHAMPION', label:'Champion 🏆',    pts:20, count:1,  info:'Pick your World Cup Champion (same as Final winner)' },
+];
+
+const STORAGE_KEY_PREFIX = 'bracket_picks_';
+// ─────────────────────────────────────────────────────────────────────────────
+
+let currentUser = null;
+let picks = { R32:[], R16:[], QF:[], SF:[], FINAL:[], CHAMPION:null };
+
+// Populate login dropdown
+const sel = document.getElementById('login-name');
+Object.keys(PASSWORDS).forEach(name => {
+  const opt = document.createElement('option');
+  opt.value = name;
+  opt.textContent = name;
+  sel.appendChild(opt);
+});
+
+// PIN input — numbers only
+document.getElementById('login-pin').addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+});
+document.getElementById('login-pin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const pin = document.getElementById('login-pin').value;
+  const err = document.getElementById('login-err');
+  err.style.display = 'none';
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display = 'block'; return; }
+  if (PASSWORDS[name] !== pin) { err.textContent = 'Incorrect PIN. Try again.'; err.style.display = 'block'; return; }
+  currentUser = name;
+  document.getElementById('header-user').textContent = name;
+  document.getElementById('header-user').classList.add('active');
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('picker-screen').style.display = '';
+  loadSavedPicks();
+  buildPicker();
+}
+
+function loadSavedPicks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_PREFIX + currentUser);
+    if (saved) {
+      picks = JSON.parse(saved);
+    } else {
+      picks = { R32:[], R16:[], QF:[], SF:[], FINAL:[], CHAMPION:null };
+    }
+  } catch(e) {
+    picks = { R32:[], R16:[], QF:[], SF:[], FINAL:[], CHAMPION:null };
+  }
+}
+
+function buildPicker() {
+  const container = document.getElementById('rounds-container');
+  container.innerHTML = '';
+
+  ROUNDS.forEach(round => {
+    const { key, label, pts, count, info } = round;
+    const isChamp = key === 'CHAMPION';
+
+    const section = document.createElement('div');
+    section.className = 'round-section';
+    section.id = `round-${key}`;
+
+    const current = isChamp ? (picks.CHAMPION ? [picks.CHAMPION] : []) : (picks[key] || []);
+    const done = current.length === count;
+
+    section.innerHTML = `
+      <div class="round-header">
+        <div class="round-name">${label}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="round-count ${done?'done':''}" id="count-${key}">${current.length}/${count}</span>
+          <span class="round-pts">${pts}pt${pts>1?'s':''} each</span>
+        </div>
+      </div>
+      <div class="round-info">${info}</div>
+      <div class="round-picks" id="picks-${key}"></div>`;
+    container.appendChild(section);
+    renderRoundPicks(key);
+  });
+  updateProgress();
+}
+
+function renderRoundPicks(key) {
+  const isChamp = key === 'CHAMPION';
+  const grid = document.getElementById(`picks-${key}`);
+  const current = isChamp ? (picks.CHAMPION ? [picks.CHAMPION] : []) : (picks[key] || []);
+  const round = ROUNDS.find(r => r.key === key);
+  const max = round.count;
+
+  grid.innerHTML = '';
+  ALL_TEAMS.forEach(team => {
+    const flag = FLAGS[team] || '🏳';
+    const selected = isChamp ? picks.CHAMPION === team : (picks[key]||[]).includes(team);
+    const atMax = !selected && current.length >= max;
+
+    const btn = document.createElement('button');
+    btn.className = `round-pick-btn${selected?' selected':''}${atMax?' locked':''}${isChamp?' champion-btn':''}`;
+    btn.innerHTML = `<span class="pick-flag">${flag}</span><span class="pick-name">${team}</span><span class="pick-check">✓</span>`;
+    btn.onclick = () => togglePick(key, team);
+    grid.appendChild(btn);
+  });
+}
+
+function togglePick(key, team) {
+  const isChamp = key === 'CHAMPION';
+  const round = ROUNDS.find(r => r.key === key);
+
+  if (isChamp) {
+    picks.CHAMPION = picks.CHAMPION === team ? null : team;
+    // Auto-sync FINAL if champion picked
+    if (picks.CHAMPION && !(picks.FINAL||[]).includes(picks.CHAMPION)) {
+      if ((picks.FINAL||[]).length < 1) picks.FINAL = [picks.CHAMPION];
+    }
+  } else {
+    if (!picks[key]) picks[key] = [];
+    const idx = picks[key].indexOf(team);
+    if (idx >= 0) {
+      picks[key].splice(idx, 1);
+    } else {
+      if (picks[key].length >= round.count) return;
+      picks[key].push(team);
+    }
+  }
+
+  renderRoundPicks(key);
+  // Re-render FINAL if champion changed
+  if (isChamp) renderRoundPicks('FINAL');
+  updateProgress();
+  autoSave();
+}
+
+function updateProgress() {
+  let total = 0, done = 0;
+  ROUNDS.forEach(({ key, count }) => {
+    const isChamp = key === 'CHAMPION';
+    const current = isChamp ? (picks.CHAMPION ? 1 : 0) : (picks[key]||[]).length;
+    total += count;
+    done += current;
+    // Update count badge
+    const badge = document.getElementById(`count-${key}`);
+    if (badge) {
+      badge.textContent = `${current}/${count}`;
+      badge.className = `round-count${current===count?' done':''}`;
+    }
+  });
+
+  const pct = Math.round(done/total*100);
+  document.getElementById('progress-bar').style.width = pct+'%';
+  document.getElementById('progress-label').textContent = `${done} of ${total} picks made (${pct}%)`;
+
+  const complete = done === total;
+  document.getElementById('save-btn').disabled = !complete;
+  document.getElementById('save-status').textContent = complete
+    ? '✓ All picks made — ready to save!'
+    : `${total - done} picks remaining`;
+  document.getElementById('save-status').className = 'save-status' + (complete?' ok':'');
+}
+
+function autoSave() {
+  try {
+    localStorage.setItem(STORAGE_KEY_PREFIX + currentUser, JSON.stringify(picks));
+  } catch(e) {}
+}
+
+const WORKER_URL = 'https://wc2026.drsteelheader.workers.dev';
+
+async function savePicks() {
+  const btn = document.getElementById('save-btn');
+  const status = document.getElementById('save-status');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${WORKER_URL}/picks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: currentUser, picks })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      status.textContent = `✓ Picks saved for ${currentUser}!`;
+      status.className = 'save-status ok';
+      btn.textContent = '✓ Saved!';
+      showConfirmation();
+    } else {
+      throw new Error('Save failed');
+    }
+  } catch (err) {
+    // Fallback — save locally and show JSON
+    autoSave();
+    status.textContent = '⚠ Could not reach server — picks saved locally';
+    status.className = 'save-status';
+    btn.textContent = 'Save Picks';
+    btn.disabled = false;
+    showConfirmation();
+  }
+}
+
+function showConfirmation() {
+  const box = document.createElement('div');
+  box.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;`;
+  box.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--gold);border-radius:10px;padding:28px;max-width:380px;width:100%;text-align:center;">
+      <div style="font-size:48px;margin-bottom:12px;">🏆</div>
+      <div style="font-family:var(--font-d);font-size:24px;font-weight:900;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Picks Submitted!</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Your bracket has been saved, <strong style="color:var(--text)">${currentUser}</strong>. Good luck!</p>
+      <button onclick="this.parentElement.parentElement.remove();" style="width:100%;background:var(--red);color:#fff;font-family:var(--font-d);font-size:14px;font-weight:800;text-transform:uppercase;padding:11px;border:none;border-radius:6px;cursor:pointer;">Done</button>
+    </div>`;
+  document.body.appendChild(box);
+}
+</script>
+</body>
+</html>
